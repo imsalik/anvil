@@ -1,6 +1,5 @@
 .forge-monitor-bar {
   background-color: rgba(0, 0, 0, 0.85);
-  padding: 0 12px;
 }
 
 .forge-ws-pill {
@@ -17,9 +16,4 @@
 
 .forge-ws-pill.empty {
   color: rgba(255, 255, 255, 0.5);
-}
-
-.forge-monitor-bar-clock {
-  color: rgba(255, 255, 255, 1);
-  font-weight: 700;
 }
