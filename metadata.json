@@ -1,8 +1,8 @@
 {
-  "name": "Forge",
-  "description": "Tiling and window manager for GNOME\n- Please report bugs/issues on https://github.com/forge-ext/forge/issues\n- Needs a new maintainer.",
+  "name": "Forge (personal)",
+  "description": "Personal fork of Forge (via jcrussell/forge): tiling plus per-monitor workspaces and secondary bar.",
   "gettext-domain": "forge",
-  "uuid": "forge@jmmaranan.com",
+  "uuid": "forge@saliksalam",
   "settings-schema": "org.gnome.shell.extensions.forge",
   "shell-version": ["45", "46", "47", "48", "49", "50", "51"],
   "session-modes": ["user", "unlock-dialog"],

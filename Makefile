@@ -1,4 +1,4 @@
-UUID = forge@jmmaranan.com
+UUID = forge@saliksalam
 INSTALL_PATH = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 MSGSRC = $(wildcard po/*.po)
 
@@ -225,6 +225,14 @@ test-nested: horizontal-line
 		GDK_BACKEND=wayland \
 		WAYLAND_DISPLAY=wayland-forge \
 		dbus-run-session -- gnome-shell --nested --wayland --wayland-display=wayland-forge
+
+# GNOME 49+: --nested is gone; needs mutter-dev-bin. Two virtual monitors mirror DP-8 + DP-5.
+test-devkit: horizontal-line
+	env GNOME_SHELL_SLOWDOWN_FACTOR=2 \
+		GDK_BACKEND=wayland \
+		WAYLAND_DISPLAY=wayland-forge \
+		dbus-run-session -- gnome-shell --devkit --wayland-display=wayland-forge \
+		--virtual-monitor 2560x1440 --virtual-monitor 1920x1080
 
 # Usage:
 #   make test-open &

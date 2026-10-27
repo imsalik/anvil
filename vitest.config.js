@@ -4,6 +4,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
+    maxWorkers: 6,
+    minWorkers: 1,
     setupFiles: ["./tests/setup.js"],
     include: ["tests/**/*.test.js", "lib/**/*.test.js"],
     coverage: {

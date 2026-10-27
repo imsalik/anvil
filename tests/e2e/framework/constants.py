@@ -72,7 +72,7 @@ class RetryConfig:
 
 
 # Forge extension constants
-FORGE_UUID = "forge@jmmaranan.com"
+FORGE_UUID = "forge@saliksalam"
 # Use --new-window to ensure multiple instances can be launched
 DEFAULT_TEST_APP = "gnome-text-editor"
 DEFAULT_TEST_APP_ARGS = ["--new-window"]

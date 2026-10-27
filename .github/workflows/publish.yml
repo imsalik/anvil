@@ -2,7 +2,7 @@
 # publish it as a GitHub Release.
 #
 # Trigger: push a tag matching v* (the repo's v<gnome>-<ego-build> scheme, e.g.
-# v49-90). The tagged commit is built into forge@jmmaranan.com.zip — the same
+# v49-90). The tagged commit is built into forge@saliksalam.zip — the same
 # EGO-shaped zip a maintainer uploads to extensions.gnome.org (see RELEASING.md).
 #
 # The zip is checksummed (SHA256SUMS) and gets a keyless build-provenance
@@ -70,19 +70,19 @@ jobs:
         run: make dist
 
       - name: Generate checksum
-        run: sha256sum "forge@jmmaranan.com.zip" > SHA256SUMS
+        run: sha256sum "forge@saliksalam.zip" > SHA256SUMS
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v4
         with:
-          subject-path: "forge@jmmaranan.com.zip"
+          subject-path: "forge@saliksalam.zip"
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v7
         with:
           name: forge-gnome-extension
           path: |
-            forge@jmmaranan.com.zip
+            forge@saliksalam.zip
             SHA256SUMS
 
       - name: Generate release notes
@@ -105,7 +105,7 @@ jobs:
           # stable, EGO-bound cut. See RELEASING.md.
           prerelease: ${{ contains(github.ref_name, '-beta') || contains(github.ref_name, '-rc') }}
           files: |
-            forge@jmmaranan.com.zip
+            forge@saliksalam.zip
             SHA256SUMS
           # Notes come from conventional-commit subjects, not PRs: GitHub's
           # generate_release_notes is PR-derived and this repo commits straight to
