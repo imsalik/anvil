@@ -226,13 +226,27 @@ test-nested: horizontal-line
 		WAYLAND_DISPLAY=wayland-forge \
 		dbus-run-session -- gnome-shell --nested --wayland --wayland-display=wayland-forge
 
-# GNOME 49+: --nested is gone; needs mutter-dev-bin. Two virtual monitors mirror DP-8 + DP-5.
-test-devkit: horizontal-line
-	env GNOME_SHELL_SLOWDOWN_FACTOR=2 \
+# GNOME 49+: --nested is gone; needs mutter-dev-bin. Isolated XDG dirs keep the
+# devkit's dconf and extensions separate from the live session. Two virtual
+# monitors mirror DP-8 + DP-5.
+DEVKIT_HOME ?= $(HOME)/.cache/forge-devkit
+DEVKIT_ENV = XDG_CONFIG_HOME=$(DEVKIT_HOME)/config XDG_DATA_HOME=$(DEVKIT_HOME)/data
+
+test-devkit: build debug horizontal-line
+	rm -rf $(DEVKIT_HOME)/data/gnome-shell/extensions/$(UUID)
+	mkdir -p $(DEVKIT_HOME)/data/gnome-shell/extensions/$(UUID) $(DEVKIT_HOME)/config
+	cp -r temp/* $(DEVKIT_HOME)/data/gnome-shell/extensions/$(UUID)
+	env $(DEVKIT_ENV) \
 		GDK_BACKEND=wayland \
 		WAYLAND_DISPLAY=wayland-forge \
-		dbus-run-session -- gnome-shell --devkit --wayland-display=wayland-forge \
-		--virtual-monitor 2560x1440 --virtual-monitor 1920x1080
+		dbus-run-session -- bash -c ' \
+		gsettings set org.gnome.shell enabled-extensions "[\"$(UUID)\"]"; \
+		gsettings set org.gnome.shell disable-user-extensions false; \
+		gsettings set org.gnome.mutter workspaces-only-on-primary true; \
+		gsettings set org.gnome.mutter dynamic-workspaces false; \
+		gsettings set org.gnome.desktop.wm.preferences num-workspaces 6; \
+		exec gnome-shell --devkit --wayland-display=wayland-forge \
+		--virtual-monitor 2560x1440 --virtual-monitor 1920x1080'
 
 # Usage:
 #   make test-open &
