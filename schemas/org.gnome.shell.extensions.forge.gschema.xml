@@ -98,6 +98,24 @@
             <summary>Skips tiling on the provided monitor indices</summary>
         </key>
 
+        <key type="b" name="monitor-workspaces-enabled">
+            <default>false</default>
+            <summary>Per-monitor workspaces</summary>
+            <description>Give secondary monitors their own workspaces (Hyprland-style). Takes over Super+N / Super+Shift+N and turns off workspaces-only-on-primary.</description>
+        </key>
+
+        <key type="s" name="monitor-workspaces">
+            <default>''</default>
+            <summary>Workspaces owned by secondary monitors</summary>
+            <description>Connector (or monitor index) to 1-based workspace numbers, e.g. "DP-5:3,5;HDMI-1:7". Unlisted workspaces belong to the primary monitor.</description>
+        </key>
+
+        <key type="b" name="monitor-bar-enabled">
+            <default>false</default>
+            <summary>Workspace bar on every monitor</summary>
+            <description>Show per-monitor workspace numbers in the top bar and a bar with workspaces and clock on secondary monitors.</description>
+        </key>
+
         <key type="b" name="stacked-tiling-mode-enabled">
             <default>true</default>
             <summary>Stacked tiling mode on/off</summary>
@@ -536,6 +554,95 @@
         <key type="as" name="prefs-config-export">
             <default><![CDATA[[]]]></default>
             <summary>Export configuration</summary>
+        </key>
+            <key type="as" name="mws-switch-1">
+            <default><![CDATA[['<Super>1']]]></default>
+            <summary>Show workspace 1 on its monitor</summary>
+        </key>
+
+        <key type="as" name="mws-move-1">
+            <default><![CDATA[['<Super><Shift>1']]]></default>
+            <summary>Move window to workspace 1</summary>
+        </key>
+
+        <key type="as" name="mws-switch-2">
+            <default><![CDATA[['<Super>2']]]></default>
+            <summary>Show workspace 2 on its monitor</summary>
+        </key>
+
+        <key type="as" name="mws-move-2">
+            <default><![CDATA[['<Super><Shift>2']]]></default>
+            <summary>Move window to workspace 2</summary>
+        </key>
+
+        <key type="as" name="mws-switch-3">
+            <default><![CDATA[['<Super>3']]]></default>
+            <summary>Show workspace 3 on its monitor</summary>
+        </key>
+
+        <key type="as" name="mws-move-3">
+            <default><![CDATA[['<Super><Shift>3']]]></default>
+            <summary>Move window to workspace 3</summary>
+        </key>
+
+        <key type="as" name="mws-switch-4">
+            <default><![CDATA[['<Super>4']]]></default>
+            <summary>Show workspace 4 on its monitor</summary>
+        </key>
+
+        <key type="as" name="mws-move-4">
+            <default><![CDATA[['<Super><Shift>4']]]></default>
+            <summary>Move window to workspace 4</summary>
+        </key>
+
+        <key type="as" name="mws-switch-5">
+            <default><![CDATA[['<Super>5']]]></default>
+            <summary>Show workspace 5 on its monitor</summary>
+        </key>
+
+        <key type="as" name="mws-move-5">
+            <default><![CDATA[['<Super><Shift>5']]]></default>
+            <summary>Move window to workspace 5</summary>
+        </key>
+
+        <key type="as" name="mws-switch-6">
+            <default><![CDATA[['<Super>6']]]></default>
+            <summary>Show workspace 6 on its monitor</summary>
+        </key>
+
+        <key type="as" name="mws-move-6">
+            <default><![CDATA[['<Super><Shift>6']]]></default>
+            <summary>Move window to workspace 6</summary>
+        </key>
+
+        <key type="as" name="mws-switch-7">
+            <default><![CDATA[['<Super>7']]]></default>
+            <summary>Show workspace 7 on its monitor</summary>
+        </key>
+
+        <key type="as" name="mws-move-7">
+            <default><![CDATA[['<Super><Shift>7']]]></default>
+            <summary>Move window to workspace 7</summary>
+        </key>
+
+        <key type="as" name="mws-switch-8">
+            <default><![CDATA[['<Super>8']]]></default>
+            <summary>Show workspace 8 on its monitor</summary>
+        </key>
+
+        <key type="as" name="mws-move-8">
+            <default><![CDATA[['<Super><Shift>8']]]></default>
+            <summary>Move window to workspace 8</summary>
+        </key>
+
+        <key type="as" name="mws-switch-9">
+            <default><![CDATA[['<Super>9']]]></default>
+            <summary>Show workspace 9 on its monitor</summary>
+        </key>
+
+        <key type="as" name="mws-move-9">
+            <default><![CDATA[['<Super><Shift>9']]]></default>
+            <summary>Move window to workspace 9</summary>
         </key>
     </schema>
 </schemalist>

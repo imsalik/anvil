@@ -11,6 +11,17 @@ vi.mock("gi://Shell", () => GnomeMocks.Shell);
 vi.mock("gi://St", () => GnomeMocks.St);
 vi.mock("gi://Clutter", () => GnomeMocks.Clutter);
 vi.mock("gi://GObject", () => GnomeMocks.GObject);
+vi.mock("gi://GnomeDesktop", () => ({
+  default: {
+    WallClock: class {
+      clock = "";
+      connect() {
+        return 1;
+      }
+      disconnect() {}
+    },
+  },
+}));
 
 // Create shared mock objects that tests can modify
 // Using vi.hoisted() ensures these are created before mocks and are mutable

@@ -48,9 +48,20 @@ describe("shouldApplyOverride (forge-9fo, forge-abk)", () => {
     expect(shouldApplyOverride(autoMaximize, settingsWith({}))).toBe(true);
   });
 
-  it("leaves every override except edge-tiling ungated", () => {
-    const gated = SETTINGS_OVERRIDES.filter((d) => d.gatedBy);
+  it("leaves every override except edge-tiling and per-monitor workspaces ungated", () => {
+    const gated = SETTINGS_OVERRIDES.filter(
+      (d) => d.gatedBy && d.gatedBy !== "monitor-workspaces-enabled"
+    );
     expect(gated).toEqual([edgeTiling]);
+  });
+
+  it("gates workspaces-only-on-primary and Super+N bindings on monitor-workspaces-enabled", () => {
+    const keys = overridesGatedBy("monitor-workspaces-enabled").map((d) => d.key);
+    expect(keys).toContain("workspaces-only-on-primary");
+    expect(keys).toContain("switch-to-workspace-1");
+    expect(keys).toContain("move-to-workspace-9");
+    expect(keys).toContain("switch-to-application-3");
+    expect(keys).toHaveLength(28);
   });
 });
 

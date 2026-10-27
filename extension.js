@@ -38,6 +38,8 @@ import { Keybindings } from "./lib/extension/keybindings.js";
 import { WindowManager } from "./lib/extension/window.js";
 import { FeatureIndicator, FeatureMenuToggle } from "./lib/extension/indicator.js";
 import { ExtensionThemeManager } from "./lib/extension/extension-theme-manager.js";
+import { MonitorWorkspaces } from "./lib/extension/monitor-workspaces.js";
+import { MonitorBars } from "./lib/extension/monitor-bar.js";
 
 // SETTINGS_OVERRIDES + shouldApplyOverride live in lib/shared/gnome-overrides.js
 // (GTK-free) so the gating policy is unit-testable.
@@ -86,8 +88,13 @@ export default class ForgeExtension extends Extension {
       // than returning null); kept for type-narrowing. Throwing rather than
       // returning routes it through the same restore path as any other failure.
       if (!settings) throw new Error("enable: settings unavailable");
-      this._overrideReconcileIds = ["tiling-mode-enabled", "disable-edge-tiling"].map((key) =>
-        settings.connect(`changed::${key}`, () => this._reconcileOverridesFor(key))
+      this._overrideReconcileIds = [
+        "tiling-mode-enabled",
+        "disable-edge-tiling",
+        "monitor-workspaces-enabled",
+      ].map((key) => settings.connect(`changed::${key}`, () => this._reconcileOverridesFor(key)));
+      this._monitorFeatureIds = ["monitor-workspaces-enabled", "monitor-bar-enabled"].map((key) =>
+        settings.connect(`changed::${key}`, () => this._syncMonitorFeatures(true))
       );
 
       this.configMgr = new ConfigManager(this);
@@ -102,6 +109,8 @@ export default class ForgeExtension extends Extension {
 
       this.theme = new ExtensionThemeManager(this);
       this.extWm = new WindowManager(this);
+      this.monitorWorkspaces = new MonitorWorkspaces(this);
+      this.monitorBars = new MonitorBars(this);
       this.keybindings = new Keybindings(this);
       this.cheatsheet = new Cheatsheet(this);
       this.keybindings.cheatsheet = this.cheatsheet;
@@ -112,6 +121,7 @@ export default class ForgeExtension extends Extension {
       this.theme.patchCss();
       this.theme.reloadStylesheet();
       this.extWm.enable();
+      this._syncMonitorFeatures(false);
     } catch (e) {
       // disable() is the single source of truth for teardown: it restores
       // _savedSettings and drops whatever was constructed before the throw (every
@@ -221,6 +231,18 @@ export default class ForgeExtension extends Extension {
       this._overrideReconcileIds = null;
     }
 
+    if (this._monitorFeatureIds) {
+      for (const id of this._monitorFeatureIds) {
+        this.settings?.disconnect(id);
+      }
+      this._monitorFeatureIds = null;
+    }
+    // Unstick per-monitor windows while workspaces-only-on-primary is still off.
+    this.monitorBars?.disable();
+    this.monitorWorkspaces?.disable();
+    this.monitorBars = null;
+    this.monitorWorkspaces = null;
+
     // Restore GNOME settings and keybindings (#461, #288)
     if (this._savedSettings) {
       try {
@@ -252,6 +274,30 @@ export default class ForgeExtension extends Extension {
     // forge-l2f7: clear Logger's module-level settings ref last (all Logger use
     // above still needs it). Counterpart to Logger.init() in enable().
     Logger.destroy();
+  }
+
+  /**
+   * Enable/disable per-monitor workspaces and their bars to match settings.
+   * @param {boolean} rebind - re-register keybindings (Super+N ownership changed)
+   */
+  _syncMonitorFeatures(rebind) {
+    const settings = this.settings;
+    if (!settings || !this.monitorWorkspaces || !this.monitorBars) return;
+    const mwsOn = settings.get_boolean("monitor-workspaces-enabled");
+    const barsOn = mwsOn && settings.get_boolean("monitor-bar-enabled");
+    try {
+      if (!barsOn) this.monitorBars.disable();
+      if (mwsOn) this.monitorWorkspaces.enable();
+      else this.monitorWorkspaces.disable();
+      if (barsOn) this.monitorBars.enable();
+      if (rebind && this.keybindings?._enabled) {
+        this.keybindings.disable();
+        this.keybindings.buildBindingDefinitions();
+        this.keybindings.enable();
+      }
+    } catch (e) {
+      Logger.warn(`Failed to sync monitor workspaces: ${e}`);
+    }
   }
 
   _onSessionModeChanged(session) {
