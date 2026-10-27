@@ -1,0 +1,18 @@
+spawn A
+spawn B
+sleep 1
+# --- simulate drag: A to secondary monitor (should join shown ws3, stuck)
+(() => { const a = global.display.get_tab_list(0, null).find(w => w.get_wm_class() === 'A'); a.move_to_monitor(1); return 'ok'; })()
+sleep 1
+(() => { const e = Main.extensionManager.lookup('forge@saliksalam').stateObj; const node = (w) => { let n = e.extWm.tree.findNode(w); while (n && n.nodeType !== 'MONITOR') n = n.parentNode; return n?.nodeValue; }; return JSON.stringify(global.display.get_tab_list(0, null).map(w => w.get_wm_class() + ' mon' + w.get_monitor() + ' tag' + w._forgeMwsIndex + ' ' + (w._forgeMwsStuck ? 'S' : '-') + ' ' + node(w) + ' ' + e.extWm.tree.findNode(w)?.mode)); })()
+# --- Super+Shift+1 on A (from secondary back to primary ws1), then drag B to secondary while ws5 shown
+(() => { const m = Main.extensionManager.lookup('forge@saliksalam').stateObj.monitorWorkspaces; const a = global.display.get_tab_list(0, null).find(w => w.get_wm_class() === 'A'); a.activate(global.get_current_time()); m.moveFocusedWindowTo(0); m.focusWorkspace(4); const b = global.display.get_tab_list(0, null).find(w => w.get_wm_class() === 'B'); b.move_to_monitor(1); return 'ok'; })()
+sleep 1
+(() => { const e = Main.extensionManager.lookup('forge@saliksalam').stateObj; const node = (w) => { let n = e.extWm.tree.findNode(w); while (n && n.nodeType !== 'MONITOR') n = n.parentNode; return n?.nodeValue; }; return JSON.stringify(global.display.get_tab_list(0, null).map(w => w.get_wm_class() + ' mon' + w.get_monitor() + ' tag' + w._forgeMwsIndex + ' ' + (w._forgeMwsStuck ? 'S' : '-') + ' ' + node(w) + ' ' + e.extWm.tree.findNode(w)?.mode).concat([JSON.stringify([...e.monitorWorkspaces._shown]), e.monitorBars._pills.map(p => p.actor.get_children().map(c => c.label + ':' + c.style_class)).join('|')])); })()
+# --- runtime toggle off then on
+(() => { Main.extensionManager.lookup('forge@saliksalam').stateObj.settings.set_boolean('monitor-workspaces-enabled', false); return 'ok'; })()
+sleep 1
+(() => { const e = Main.extensionManager.lookup('forge@saliksalam').stateObj; return JSON.stringify({mws: e.monitorWorkspaces.enabled, bars: e.monitorBars._bars.length, onlyPrimary: new (imports.gi.Gio.Settings)({schema_id: 'org.gnome.mutter'}).get_boolean('workspaces-only-on-primary'), kb: Object.keys(e.keybindings._bindings).filter(k => k.startsWith('mws')).length}); })()
+(() => { Main.extensionManager.lookup('forge@saliksalam').stateObj.settings.set_boolean('monitor-workspaces-enabled', true); return 'ok'; })()
+sleep 1
+(() => { const e = Main.extensionManager.lookup('forge@saliksalam').stateObj; return JSON.stringify({mws: e.monitorWorkspaces.enabled, bars: e.monitorBars._bars.length, onlyPrimary: new (imports.gi.Gio.Settings)({schema_id: 'org.gnome.mutter'}).get_boolean('workspaces-only-on-primary'), kb: Object.keys(e.keybindings._bindings).filter(k => k.startsWith('mws')).length, wins: global.display.get_tab_list(0, null).map(w => w.get_wm_class() + ' mon' + w.get_monitor() + ' ' + (w._forgeMwsStuck ? 'S' : '-'))}); })()
