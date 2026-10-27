@@ -2,6 +2,7 @@
 # Headless smoke test of per-monitor workspaces in an isolated gnome-shell.
 # Usage: make build debug && tests/smoke/smoke.sh tests/smoke/<name>.steps
 # Steps: a JS expression run via Shell.Eval, "# comment", "sleep N", "spawn CLASS" (kitty), or "!shell cmd".
+# monconf.py (single/dual) toggles the second virtual monitor to simulate unplug/replug.
 set -u
 REPO=$(cd "$(dirname "$0")/../.." && pwd)
 D=$HOME/.cache/forge-smoke
@@ -11,6 +12,7 @@ rm -rf "$D" && mkdir -p "$EXT" "$D/config"
 cp -r "$REPO"/temp/* "$EXT"
 export XDG_CONFIG_HOME=$D/config XDG_DATA_HOME=$D/data
 STEPS=$(realpath "$1")
+export REPO
 exec dbus-run-session -- bash -c '
 set -u
 gs() { gsettings "$@"; }

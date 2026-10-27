@@ -1,0 +1,15 @@
+# Unplug/replug the secondary monitor: windows must keep their workspace.
+spawn A
+spawn B
+spawn C
+# B -> ws3 (shown on secondary), C -> ws5 (hidden), primary to ws2
+(() => { const m = Main.extensionManager.lookup('forge@saliksalam').stateObj.monitorWorkspaces; const get = c => global.display.get_tab_list(0, null).find(w => w.get_wm_class() === c); get('B').activate(global.get_current_time()); m.moveFocusedWindowTo(2); get('C').activate(global.get_current_time()); m.moveFocusedWindowTo(4); m.focusWorkspace(1, {warp: false}); return 'ok'; })()
+sleep 1
+!/usr/bin/python3 -I "$REPO/tests/smoke/monconf.py" single
+sleep 2
+# after unplug: all on monitor 0, B on ws index 2, C on 4, nothing stuck
+(() => { const W = c => global.display.get_tab_list(0, null).find(w => w.get_wm_class() === c); const s = c => [W(c).get_monitor(), W(c).get_workspace()?.index(), !!W(c)._forgeMwsStuck].join(','); const got = {A: s('A'), B: s('B'), C: s('C')}; const ok = got.A === '0,0,false' && got.B === '0,2,false' && got.C === '0,4,false'; return (ok ? 'PASS ' : 'FAIL ') + JSON.stringify(got); })()
+!/usr/bin/python3 -I "$REPO/tests/smoke/monconf.py" dual
+sleep 2
+# after replug: B back on monitor 1 stuck (ws3 shown), C on monitor 1 hidden on ws5, A untouched
+(() => { const W = c => global.display.get_tab_list(0, null).find(w => w.get_wm_class() === c); const s = c => [W(c).get_monitor(), Utils(W(c)), !!W(c)._forgeMwsStuck].join(','); function Utils(w) { return w._forgeMwsStuck ? w._forgeMwsIndex : w.get_workspace()?.index(); } const got = {A: s('A'), B: s('B'), C: s('C')}; const ok = got.A === '0,0,false' && got.B === '1,2,true' && got.C === '1,4,false'; return (ok ? 'PASS ' : 'FAIL ') + JSON.stringify(got); })()
