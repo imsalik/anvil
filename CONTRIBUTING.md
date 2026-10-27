@@ -1,8 +1,8 @@
-# Contributing to Forge
+# Developing Anvil
 
-Thanks for helping out! This is an AI-maintained fork of
-[Forge](https://github.com/forge-ext/forge); fixes here are intended to be
-upstreamed when possible.
+Anvil is my personal fork of [Forge](https://github.com/forge-ext/forge), based on
+[jcrussell/forge](https://github.com/jcrussell/forge). This page covers building,
+testing and code style.
 
 ## Prerequisites
 
@@ -18,7 +18,7 @@ make dev           # compile schemas + install to ~/.local/share/gnome-shell/ext
 make prod          # like dev, then enable + restart shell
 ```
 
-Apply changes: on X11, `Alt+F2` → `r` → Enter; on Wayland, log out/in — or use a
+Apply changes: on X11, `Alt+F2` → `r` → Enter; on Wayland, log out/in, or use a
 nested session that needs no restart:
 
 ```bash
@@ -33,6 +33,16 @@ make log           # tail Forge's logs
 npm test                 # unit tests (Vitest, mocked GNOME APIs)
 make unit-test-docker    # the same, in the canonical Docker environment
 make e2e-test            # end-to-end tests against real GNOME Shell in Docker
+make test-devkit         # nested shell with two virtual monitors, isolated config dirs
+```
+
+Per-monitor workspace smoke tests run a headless dual-monitor shell (after
+`make build debug`):
+
+```bash
+tests/smoke/smoke.sh tests/smoke/monitor-workspaces.steps
+tests/smoke/smoke.sh tests/smoke/monitor-workspaces-drag.steps
+tests/smoke/smoke.sh tests/smoke/monitor-hotplug.steps
 ```
 
 - Unit-test guide (fixtures, mocks, avoiding vacuous tests):
@@ -40,7 +50,7 @@ make e2e-test            # end-to-end tests against real GNOME Shell in Docker
 - E2E infrastructure: [tests/e2e/README.md](tests/e2e/README.md).
 
 New behavior should come with a test. Unit tests must drive real `lib/` code, not
-reimplement it — a test that can't go red when you break the code under test isn't
+reimplement it. A test that can't go red when you break the code under test isn't
 testing anything.
 
 ## Code style
@@ -63,24 +73,28 @@ shims). The user-facing behavior is documented in [docs/user/](docs/user/).
 
 User-facing strings are wrapped in `_("...")` and localized with gettext. When you
 add or change a string, run `make update-pot` and commit `po/forge.pot`. Catalogs
-(`po/<lang>.po`) are currently maintained manually via `make update-po`; crowd-sourced
-translation through Weblate is planned but not yet active (pending upstreaming).
+(`po/<lang>.po`) are maintained manually via `make update-po`.
 Full workflow: [docs/dev/translations.md](docs/dev/translations.md).
 
-## Submitting changes
+## Making changes
 
-1. Branch off `main`.
-2. Make the change with a test; run `npm test` and `npm run lint`.
-3. Open a PR with a clear description of the problem and the fix.
+Work happens on `main`. Make the change with a test, run `npm test` and
+`npm run lint`, then commit. The pre-commit hook also runs `ruff` on the Python
+smoke and e2e helpers, so it needs `ruff` installed.
 
 GNOME compatibility matters: changes should work on GNOME 45+ across X11 and
 Wayland. Mutter API differences belong in `lib/extension/compat.js`
 ([docs/dev/compat.md](docs/dev/compat.md)), not scattered through the codebase.
 
-## Releasing
+## Releases
 
-Maintainers: cutting a release and submitting to extensions.gnome.org is
-documented in [RELEASING.md](RELEASING.md).
+There are none: Anvil is not on extensions.gnome.org, and it is installed from
+source (see the [README](README.md)).
 
-> Maintainers: this repo tracks work with **bd** (beads) and additional automation
-> conventions documented in [CLAUDE.md](CLAUDE.md).
+## Syncing with the base fork
+
+`jc` is the [jcrussell/forge](https://github.com/jcrussell/forge) remote:
+
+```bash
+git fetch jc && git merge jc/main
+```

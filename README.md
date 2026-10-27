@@ -1,156 +1,118 @@
-# Forge (maintained by Claude)
+# Anvil
 
-[![CI](https://github.com/jcrussell/forge/actions/workflows/testing.yml/badge.svg)](https://github.com/jcrussell/forge/actions/workflows/testing.yml)
-[![codecov](https://codecov.io/github/jcrussell/forge/graph/badge.svg?token=MFNOBH5D4L)](https://codecov.io/github/jcrussell/forge)
+My personal fork of [Forge](https://github.com/forge-ext/forge), the GNOME Shell extension for i3/sway-style tiling. It is based on [jcrussell/forge](https://github.com/jcrussell/forge), the actively maintained fork, and adds what I need for a dual-monitor GNOME 50 setup: Hyprland-style per-monitor workspaces and a workspace bar on every monitor.
 
-An AI-maintained fork of [Forge](https://github.com/forge-ext/forge), the GNOME
-Shell extension that provides i3/sway-style tiling window management.
+Anvil installs as `anvil@imsalik`, so updates to Forge from extensions.gnome.org never overwrite it. It reuses Forge's GSettings schemas and `~/.config/forge` paths, so existing Forge settings, keybindings and window rules carry over as-is.
 
-This fork addresses bugs and adds features while the upstream project seeks a
-new maintainer. Contributions here are intended to be upstreamed when possible.
-Thanks to [@jmmaranan](https://github.com/jmmaranan) and all original
-contributors for creating this excellent extension.
+## What Anvil adds
 
-## Features
+### Per-monitor workspaces
 
-- Works on GNOME 45+ (X11 and Wayland)
-- Tree-based tiling with vertical and horizontal split containers similar to i3-wm and sway-wm
-- Vim-like keybindings for navigation/swapping windows/moving windows in the containers
-- Drag and drop tiling
-- Support for floating windows, smart gaps and focus hint
-- Customizable shortcuts in extension preferences
-- Some support for multi-display
-- Tiling support per workspace
-- Update hint color scheme from preferences
-- Stacked and tabbed tiling layouts, plus workspace monocle
-- Swap current window with the last active window
-- Auto Split or Quarter Tiling
-- Show/hide tab decoration via keybinding
-- Window resize using keyboard shortcuts
+Each workspace belongs to one monitor, like Hyprland's workspace rules. For example, pin workspaces 3 and 5 to the secondary monitor and keep the rest on the primary.
 
-## Fork Improvements
+- `Super+1..9` shows that workspace on its own monitor without changing what the other monitor shows.
+- `Super+Shift+1..9` sends the focused window to that workspace without following it.
+- Switching to an empty workspace on another monitor moves the pointer there, so new windows open on that monitor.
+- Dragging a window to another monitor moves it to the workspace that monitor is showing.
+- Windows keep their workspace when a monitor is unplugged and plugged back in (tested with virtual monitors, not yet with a real dock).
+- Configure it under **Preferences → Monitors**: one switch for the feature, and a monitor picker for each workspace. Unassigned workspaces stay on the primary. Monitors are listed by connector (for example `DP-5`), and a configured monitor that is disconnected stays in the list, marked "disconnected".
 
-This fork includes significant improvements over the upstream version:
+Per-monitor workspaces and the bar have only been tested on GNOME 50 (Wayland).
 
-### New Features
+While the feature is on, Anvil turns off GNOME's "workspaces on primary display only" and its default `Super+N` workspace and app shortcuts. It restores them when the feature or the extension is turned off.
 
-- **Keybindings cheatsheet overlay** - Quick reference for all shortcuts (`Super+Shift+/`)
-- **Portable config sync** - Export/import settings and keybindings for backup or sharing
-- **Arrow key navigation** - Arrow keys work alongside vim-style hjkl bindings
-- **Floating window rules UI** - Manage floating window rules directly in preferences
-- **Screen edge margins** - Configurable gaps for compatibility with panels/docks
-- **Additional keybindings** - Config reload, evenly distribute windows, workspace monocle, and more
-- **More customization** - Border radius, tab margins, default layout, adjustable gap limits
-- **Monitor exclusion** - Option to exclude specific monitors from tiling
+### Workspace bar on every monitor
 
-### Bug Fixes
+- Workspace pills in the top panel on the primary monitor, plus a panel with pills and a clock on each secondary monitor.
+- The secondary panel copies the main panel's style classes, so it follows the shell theme and Open Bar styling.
+- Hides the Activities button while the bar is on (even if another extension shows it again), and restores it when the bar is off.
+- Clicking a pill switches workspace without moving the pointer.
 
-- Window resize and focus navigation fixes
-- App-specific fixes for Chrome, Brave, Steam, Blender, ddterm, and others
-- Stacked/tabbed container behavior improvements
-- Preview hints and border rendering fixes
-- Cross-workspace window operations
-- Preferences saving and theme handling
+## Inherited from Forge
 
-### Code Quality
+- Tree-based tiling with horizontal and vertical splits, stacked and tabbed layouts, and workspace monocle
+- Vim-style and arrow-key bindings to focus, swap and move windows, plus keyboard resize
+- Drag-and-drop tiling, floating windows and floating rules, smart gaps, focus hint
+- Auto split ("quarter tiling"), screen edge margins, monitor exclusion
+- Keybinding cheatsheet (`Super+Shift+/`)
+- Export and import of settings and keybindings
+- GNOME 45 to 51, on X11 and Wayland
 
-- Comprehensive unit test suite (1,750+ tests, ~92% line coverage, 90% enforced in CI) plus a Dockerized E2E suite
-- Refactored architecture with focused, extracted managers (see [architecture docs](docs/dev/architecture.md))
-- Riskier options stay behind clearly-marked experimental toggles
+The fixes and features from jcrussell/forge (tests, refactors, app-specific fixes) are included. See the [user guide](docs/user/) for details.
 
-## Known Issues / Limitations
+**Limitations** (inherited from Forge): dynamic workspaces are not supported, and vertical/portrait monitor setups only partly work. See [multi-monitor](docs/user/monitors.md).
 
-- Does not support dynamic workspaces
-- Does not support vertical monitor setup
+## Install from source
 
-## Installation
-
-### From extensions.gnome.org
-
-_Listing pending review — this fork is not yet published on extensions.gnome.org._
-Once it is, install it from the [GNOME Extensions](https://extensions.gnome.org)
-website (with the browser integration) or the **Extensions** / **Extension Manager**
-app by searching for "Forge".
-
-### From a pre-built release
-
-Download `anvil@imsalik.zip` from the
-[latest release](https://github.com/jcrussell/forge/releases/latest), then:
+Anvil is not on extensions.gnome.org and has no release builds. Install it from source; the `main` branch is always the current version. Needs Node.js 20+ and gettext.
 
 ```bash
-# (optional) verify the checksum and build provenance
-sha256sum -c SHA256SUMS
-gh attestation verify anvil@imsalik.zip --repo jcrussell/forge
+git clone git@github.com:imsalik/anvil.git && cd anvil
+npm install
+make build install          # make dev = debug build
+```
 
-# install
-gnome-extensions install --force anvil@imsalik.zip
+Log out and back in (Wayland needs a fresh login; on X11, `Alt+F2` then `r` also works), then enable it:
 
-# then log out and back in (X11: Alt+F2, then r) so the shell picks it up
-
-# ...and enable
+```bash
 gnome-extensions enable anvil@imsalik
 ```
 
-`enable` fails with "does not exist" until the shell has re-scanned — that's why the
-log-out/restart step comes between install and enable, not after.
+Run `enable` after the re-login: until the shell has rescanned, it fails with "does not exist".
 
-### Build from source
+### Switching from Forge
+
+Disable Forge first (`gnome-extensions disable forge@jmmaranan.com`), since both would tile the same windows. If you use a workspace-bar extension such as Space Bar, disable it too, because Anvil draws its own workspace pills. Your Forge settings carry over.
+
+### Updating
 
 ```bash
-# Install dependencies (Node.js 20+ and gettext required)
-npm install
-
-# Development build: compile and install to ~/.local/share/gnome-shell/extensions/
-make dev
-
-# Production build: compile, install, enable extension, restart shell
-make prod
+git pull && make build install
 ```
 
-After installation, log out and log back in (or restart GNOME Shell on X11 with `Alt+F2`, then `r`).
+Then log out and back in. Changes to settings and keybindings apply live, but code changes need a new shell session on Wayland.
 
-![image](https://user-images.githubusercontent.com/348125/146386593-8f53ea8b-2cf3-4d44-a613-bbcaf89f9d4a.png)
+## Configuration
 
-## Documentation
+- Preferences: `gnome-extensions prefs anvil@imsalik`
+- Window rules: `~/.config/forge/config/windows.json` ([window rules](docs/user/rules.md))
+- Stylesheet overrides: `~/.config/forge/stylesheet/forge/stylesheet.css` ([theming](docs/user/theming.md))
+- Per-monitor workspaces from the command line, using the `monitor-workspaces`, `monitor-workspaces-enabled` and `monitor-bar-enabled` keys of `org.gnome.shell.extensions.forge`. The format is `CONNECTOR:workspaces`, with workspaces 1-based and monitors separated by `;`:
 
-Full docs live in [`docs/`](docs/):
+  ```bash
+  gsettings --schemadir ~/.local/share/gnome-shell/extensions/anvil@imsalik/schemas \
+    set org.gnome.shell.extensions.forge monitor-workspaces 'DP-5:3,5'
+  ```
 
-- **User guide** ([`docs/user/`](docs/user/)) — [layouts & tiling](docs/user/layouts.md),
-  [keybindings](docs/user/keybindings.md), [theming](docs/user/theming.md),
-  [window rules](docs/user/rules.md), [portable config](docs/user/config.md),
-  [multi-monitor](docs/user/monitors.md), [troubleshooting](docs/user/troubleshooting.md).
-- **Developer reference** ([`docs/dev/`](docs/dev/)) — architecture, rendering
-  pipeline, Mutter compatibility.
-- Press **`Super+Shift+/`** in-session for the keybinding cheatsheet.
+## Docs
 
-## Forge Override Paths
+- [User guide](docs/user/): [layouts](docs/user/layouts.md), [keybindings](docs/user/keybindings.md), [theming](docs/user/theming.md), [window rules](docs/user/rules.md), [portable config](docs/user/config.md), [multi-monitor](docs/user/monitors.md), [troubleshooting](docs/user/troubleshooting.md)
+- [Developer reference](docs/dev/): architecture, rendering pipeline, Mutter compatibility, hazards
 
-- Window rules: `$HOME/.config/forge/config/windows.json` — see [window rules](docs/user/rules.md) and [portable config](docs/user/config.md)
-- Stylesheet: `$HOME/.config/forge/stylesheet/forge/stylesheet.css` — see [theming](docs/user/theming.md)
+## Development
 
-## GNOME Defaults
+Run `make help` for every target. The ones I use most:
 
-GNOME Shell has built in support for workspace management and seems to work well - so Forge will not touch those.
+- `npm test`: unit tests (Vitest, mocked GNOME APIs)
+- `npm run lint:src`, `npm run typecheck`: ESLint and `tsc`
+- `make test-devkit`: nested shell with two virtual monitors, using its own config and cache dirs so it doesn't touch the desktop session
+- `tests/smoke/smoke.sh tests/smoke/<name>.steps` (after `make build debug`): headless dual-monitor smoke tests for per-monitor workspaces, drag and hotplug
+- `make e2e-test`: Dockerized end-to-end tests against real GNOME Shell
 
-User is encouraged to bind the following:
-- Switching/moving windows to different workspaces
-- Switching to numbered, previous or next workspace
+More in [CONTRIBUTING.md](CONTRIBUTING.md) and [tests/README.md](tests/README.md).
 
-## Local Development Setup
+### Keeping up with the base fork
 
-See **[CONTRIBUTING.md](CONTRIBUTING.md)** for environment setup, build/test commands, and code style. Run `make help` for the full list of targets.
+Remotes: `origin` is this repo, `jc` is [jcrussell/forge](https://github.com/jcrussell/forge) (the base) and `upstream` is [forge-ext/forge](https://github.com/forge-ext/forge).
 
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tests, and code style, and the
-[upstream discussion](https://github.com/orgs/forge-ext/discussions/501) about the
-path to merging this fork back into the main project.
+```bash
+git fetch jc && git merge jc/main
+```
 
 ## Credits
 
-Thank you to:
+- [@jmmaranan](https://github.com/jmmaranan) and the [Forge contributors](https://github.com/forge-ext/forge), for creating Forge
+- [@jcrussell](https://github.com/jcrussell) and contributors to [jcrussell/forge](https://github.com/jcrussell/forge), for keeping it alive
+- Michael Stapelberg and contributors to i3; System76 and contributors to pop-shell; ReworkCSS for css-parse/css-stringify
 
-- **The original Forge developers** - [@jmmaranan](https://github.com/jmmaranan) and all [upstream contributors](https://github.com/forge-ext/forge) who created this extension
-- Michael Stapelberg/contributors for i3
-- System76/contributors for pop-shell
-- ReworkCSS/contributors for css-parse/css-stringify
+Licensed under the [GPL-3.0](LICENSE), like Forge.
