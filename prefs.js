@@ -26,6 +26,7 @@ import { AppearancePage } from "./lib/prefs/appearance.js";
 import { SettingsPage, makeAboutButton, findHeaderBar } from "./lib/prefs/settings.js";
 import { FloatingPage } from "./lib/prefs/floating.js";
 import { PortabilityPage } from "./lib/prefs/portability.js";
+import { MonitorsPage } from "./lib/prefs/monitors.js";
 
 export default class ForgeExtensionPreferences extends ExtensionPreferences {
   settings = this.getSettings();
@@ -58,6 +59,7 @@ export default class ForgeExtensionPreferences extends ExtensionPreferences {
     this.aboutButton = headerBar ? null : aboutButton;
 
     window.add(new SettingsPage(this));
+    window.add(new MonitorsPage(this));
     window.add(new AppearancePage(this));
     window.add(new KeyboardPage(this));
     window.add(new FloatingPage(this));

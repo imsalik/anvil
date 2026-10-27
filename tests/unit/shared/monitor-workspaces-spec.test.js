@@ -2,7 +2,9 @@ import { describe, it, expect } from "vitest";
 import {
   parseMonitorWorkspaces,
   resolveOwners,
-} from "../../../lib/extension/monitor-workspaces.js";
+  formatMonitorWorkspaces,
+  assignWorkspaces,
+} from "../../../lib/shared/monitor-workspaces-spec.js";
 
 describe("parseMonitorWorkspaces", () => {
   it("returns an empty map for an empty spec", () => {
@@ -38,5 +40,32 @@ describe("resolveOwners", () => {
   it("ignores entries naming the primary monitor", () => {
     const owners = resolveOwners(parseMonitorWorkspaces("DP-8:1"), 3, 0, resolve);
     expect(owners).toEqual([0, 0, 0]);
+  });
+});
+
+describe("formatMonitorWorkspaces", () => {
+  it("round-trips a parsed spec and drops empty monitors", () => {
+    const spec = parseMonitorWorkspaces("DP-5:5,3;HDMI-1:7");
+    spec.set("eDP-1", []);
+    expect(formatMonitorWorkspaces(spec)).toBe("DP-5:3,5;HDMI-1:7");
+  });
+});
+
+describe("assignWorkspaces", () => {
+  it("moves workspaces between monitors and back to the primary", () => {
+    const spec = assignWorkspaces(parseMonitorWorkspaces("DP-5:3,5"), [
+      "",
+      "DP-5",
+      "",
+      "",
+      "HDMI-1",
+      "",
+    ]);
+    expect(formatMonitorWorkspaces(spec)).toBe("DP-5:2;HDMI-1:5");
+  });
+
+  it("keeps assignments beyond the edited rows", () => {
+    const spec = assignWorkspaces(parseMonitorWorkspaces("DP-5:3,12"), ["", "", ""]);
+    expect(formatMonitorWorkspaces(spec)).toBe("DP-5:12");
   });
 });
