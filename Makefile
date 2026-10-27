@@ -1,4 +1,4 @@
-UUID = forge@saliksalam
+UUID = anvil@imsalik
 INSTALL_PATH = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 MSGSRC = $(wildcard po/*.po)
 

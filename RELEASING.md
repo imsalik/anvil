@@ -21,7 +21,7 @@ git tag v49-90
 git push origin v49-90
 ```
 
-CI then builds `forge@saliksalam.zip`, generates `SHA256SUMS`, attests
+CI then builds `anvil@imsalik.zip`, generates `SHA256SUMS`, attests
 provenance, and creates the GitHub Release with auto-generated notes. To rehearse
 without releasing, run the workflow via **Actions → release → Run workflow**
 (`workflow_dispatch`) on a branch — it builds and attests but creates no Release.
@@ -76,7 +76,7 @@ release.
 
 EGO has no upload API and human-reviews every submission, so this step is manual:
 
-1. Grab the release's `forge@saliksalam.zip` (or run `make dist` locally — same
+1. Grab the release's `anvil@imsalik.zip` (or run `make dist` locally — same
    artifact).
 2. Upload it at <https://extensions.gnome.org/upload/>, marking the ToS and
    shell-license compliance boxes.
@@ -90,5 +90,5 @@ distribution trust comes from its review.
 
 ```bash
 sha256sum -c SHA256SUMS
-gh attestation verify forge@saliksalam.zip --repo jcrussell/forge
+gh attestation verify anvil@imsalik.zip --repo jcrussell/forge
 ```

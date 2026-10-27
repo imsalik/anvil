@@ -1,31 +1,31 @@
 # --- boot state
-(() => { const e = Main.extensionManager.lookup('forge@saliksalam'); return JSON.stringify({state: e.state, err: e.error, mws: e.stateObj?.monitorWorkspaces?.enabled, owners: e.stateObj?.monitorWorkspaces?._owners, shown: [...(e.stateObj?.monitorWorkspaces?._shown ?? [])], onlyPrimary: new (imports.gi.Gio.Settings)({schema_id: 'org.gnome.mutter'}).get_boolean('workspaces-only-on-primary'), bars: e.stateObj?.monitorBars?._bars?.length, pills: e.stateObj?.monitorBars?._pills?.map(p => p.actor.get_children().map(c => c.label + ':' + c.style_class))}); })()
+(() => { const e = Main.extensionManager.lookup('anvil@imsalik'); return JSON.stringify({state: e.state, err: e.error, mws: e.stateObj?.monitorWorkspaces?.enabled, owners: e.stateObj?.monitorWorkspaces?._owners, shown: [...(e.stateObj?.monitorWorkspaces?._shown ?? [])], onlyPrimary: new (imports.gi.Gio.Settings)({schema_id: 'org.gnome.mutter'}).get_boolean('workspaces-only-on-primary'), bars: e.stateObj?.monitorBars?._bars?.length, pills: e.stateObj?.monitorBars?._pills?.map(p => p.actor.get_children().map(c => c.label + ':' + c.style_class))}); })()
 spawn A
 spawn B
 sleep 2
 # --- move B to ws3 (secondary), A stays primary ws1
-(() => { const m = Main.extensionManager.lookup('forge@saliksalam').stateObj.monitorWorkspaces; const b = global.display.get_tab_list(0, null).find(w => w.get_wm_class() === 'B'); b.activate(global.get_current_time()); m.moveFocusedWindowTo(2); return 'ok'; })()
+(() => { const m = Main.extensionManager.lookup('anvil@imsalik').stateObj.monitorWorkspaces; const b = global.display.get_tab_list(0, null).find(w => w.get_wm_class() === 'B'); b.activate(global.get_current_time()); m.moveFocusedWindowTo(2); return 'ok'; })()
 sleep 1
 spawn C
 sleep 1
 # --- C opened with focus on primary; now dump
-(() => { const e = Main.extensionManager.lookup('forge@saliksalam').stateObj; const node = (w) => { let n = e.extWm.tree.findNode(w); while (n && n.nodeType !== 'MONITOR') n = n.parentNode; return n?.nodeValue; }; return JSON.stringify(global.display.get_tab_list(0, null).map(w => ({c: w.get_wm_class(), mon: w.get_monitor(), ws: w.get_workspace()?.index(), tag: w._forgeMwsIndex, stuck: !!w._forgeMwsStuck, sticky: w.is_on_all_workspaces(), float: e.extWm.tree.findNode(w)?.mode, node: node(w), vis: w.showing_on_its_workspace() && w.get_compositor_private()?.visible})).concat([{active: global.workspace_manager.get_active_workspace_index(), shown: [...e.monitorWorkspaces._shown], pills: e.monitorBars._pills.map(p => p.actor.get_children().map(c => c.label + ':' + c.style_class))}])); })()
+(() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; const node = (w) => { let n = e.extWm.tree.findNode(w); while (n && n.nodeType !== 'MONITOR') n = n.parentNode; return n?.nodeValue; }; return JSON.stringify(global.display.get_tab_list(0, null).map(w => ({c: w.get_wm_class(), mon: w.get_monitor(), ws: w.get_workspace()?.index(), tag: w._forgeMwsIndex, stuck: !!w._forgeMwsStuck, sticky: w.is_on_all_workspaces(), float: e.extWm.tree.findNode(w)?.mode, node: node(w), vis: w.showing_on_its_workspace() && w.get_compositor_private()?.visible})).concat([{active: global.workspace_manager.get_active_workspace_index(), shown: [...e.monitorWorkspaces._shown], pills: e.monitorBars._pills.map(p => p.actor.get_children().map(c => c.label + ':' + c.style_class))}])); })()
 # --- Super+5: show ws5 on secondary (B should hide)
-(() => { Main.extensionManager.lookup('forge@saliksalam').stateObj.monitorWorkspaces.focusWorkspace(4); return 'ok'; })()
+(() => { Main.extensionManager.lookup('anvil@imsalik').stateObj.monitorWorkspaces.focusWorkspace(4); return 'ok'; })()
 sleep 1
 spawn D
 sleep 1
 # --- D should land on ws5 if focus/pointer is on secondary; dump
-(() => { const e = Main.extensionManager.lookup('forge@saliksalam').stateObj; const node = (w) => { let n = e.extWm.tree.findNode(w); while (n && n.nodeType !== 'MONITOR') n = n.parentNode; return n?.nodeValue; }; return JSON.stringify(global.display.get_tab_list(0, null).map(w => ({c: w.get_wm_class(), mon: w.get_monitor(), ws: w.get_workspace()?.index(), tag: w._forgeMwsIndex, stuck: !!w._forgeMwsStuck, sticky: w.is_on_all_workspaces(), node: node(w)})).concat([{active: global.workspace_manager.get_active_workspace_index(), curMon: global.display.get_current_monitor(), focus: global.display.get_focus_window()?.get_wm_class(), shown: [...e.monitorWorkspaces._shown], pills: e.monitorBars._pills.map(p => p.actor.get_children().map(c => c.label + ':' + c.style_class))}])); })()
+(() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; const node = (w) => { let n = e.extWm.tree.findNode(w); while (n && n.nodeType !== 'MONITOR') n = n.parentNode; return n?.nodeValue; }; return JSON.stringify(global.display.get_tab_list(0, null).map(w => ({c: w.get_wm_class(), mon: w.get_monitor(), ws: w.get_workspace()?.index(), tag: w._forgeMwsIndex, stuck: !!w._forgeMwsStuck, sticky: w.is_on_all_workspaces(), node: node(w)})).concat([{active: global.workspace_manager.get_active_workspace_index(), curMon: global.display.get_current_monitor(), focus: global.display.get_focus_window()?.get_wm_class(), shown: [...e.monitorWorkspaces._shown], pills: e.monitorBars._pills.map(p => p.actor.get_children().map(c => c.label + ':' + c.style_class))}])); })()
 # --- Super+2 on primary; secondary must keep ws5; then Super+3 back
-(() => { const m = Main.extensionManager.lookup('forge@saliksalam').stateObj.monitorWorkspaces; m.focusWorkspace(1); return String(global.workspace_manager.get_active_workspace_index()); })()
+(() => { const m = Main.extensionManager.lookup('anvil@imsalik').stateObj.monitorWorkspaces; m.focusWorkspace(1); return String(global.workspace_manager.get_active_workspace_index()); })()
 sleep 1
-(() => { const m = Main.extensionManager.lookup('forge@saliksalam').stateObj.monitorWorkspaces; m.focusWorkspace(2); return JSON.stringify({active: global.workspace_manager.get_active_workspace_index(), shown: [...m._shown], wins: global.display.get_tab_list(0, null).map(w => w.get_wm_class() + ':' + w.get_monitor() + ':' + (w._forgeMwsStuck ? 'S' : '-') + ':' + w.get_workspace()?.index())}); })()
+(() => { const m = Main.extensionManager.lookup('anvil@imsalik').stateObj.monitorWorkspaces; m.focusWorkspace(2); return JSON.stringify({active: global.workspace_manager.get_active_workspace_index(), shown: [...m._shown], wins: global.display.get_tab_list(0, null).map(w => w.get_wm_class() + ':' + w.get_monitor() + ':' + (w._forgeMwsStuck ? 'S' : '-') + ':' + w.get_workspace()?.index())}); })()
 # --- overview-style activation of secondary-owned ws index 4 should redirect
 (() => { global.workspace_manager.get_workspace_by_index(4).activate(global.get_current_time()); return 'ok'; })()
 sleep 1
-(() => { const m = Main.extensionManager.lookup('forge@saliksalam').stateObj.monitorWorkspaces; return JSON.stringify({active: global.workspace_manager.get_active_workspace_index(), shown: [...m._shown]}); })()
+(() => { const m = Main.extensionManager.lookup('anvil@imsalik').stateObj.monitorWorkspaces; return JSON.stringify({active: global.workspace_manager.get_active_workspace_index(), shown: [...m._shown]}); })()
 # --- disable extension: unstick + restore
-(() => { Main.extensionManager.disableExtension('forge@saliksalam'); return 'ok'; })()
+(() => { Main.extensionManager.disableExtension('anvil@imsalik'); return 'ok'; })()
 sleep 1
 (() => JSON.stringify({onlyPrimary: new (imports.gi.Gio.Settings)({schema_id: 'org.gnome.mutter'}).get_boolean('workspaces-only-on-primary'), sw1: new (imports.gi.Gio.Settings)({schema_id: 'org.gnome.desktop.wm.keybindings'}).get_strv('switch-to-workspace-1'), wins: global.display.get_tab_list(0, null).map(w => w.get_wm_class() + ':' + w.is_always_on_all_workspaces() + ':' + (w._forgeMwsStuck ?? 'x'))}))()

@@ -1,10 +1,10 @@
 {
-  "name": "Forge (personal)",
-  "description": "Personal fork of Forge (via jcrussell/forge): tiling plus per-monitor workspaces and secondary bar.",
+  "name": "Anvil",
+  "description": "Anvil, a personal fork of Forge (via jcrussell/forge): tiling plus per-monitor workspaces and secondary bar.",
   "gettext-domain": "forge",
-  "uuid": "forge@saliksalam",
+  "uuid": "anvil@imsalik",
   "settings-schema": "org.gnome.shell.extensions.forge",
   "shell-version": ["45", "46", "47", "48", "49", "50", "51"],
   "session-modes": ["user", "unlock-dialog"],
-  "url": "https://github.com/forge-ext/forge"
+  "url": "https://github.com/imsalik/anvil"
 }

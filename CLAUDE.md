@@ -60,8 +60,8 @@ See **[docs/dev/](docs/dev/)** for the detailed reference: [architecture.md](doc
 
 ## Personal fork
 
-- UUID `forge@saliksalam` (renamed so EGO updates to `forge@jmmaranan.com` never overwrite it). GSettings schema ids are unchanged so existing settings carry over.
-- Remotes: `jc` = jcrussell/forge (base), `upstream` = forge-ext/forge. Work on `main-personal`.
+- UUID `anvil@imsalik` (renamed so EGO updates to `forge@jmmaranan.com` never overwrite it). GSettings schema ids are unchanged so existing settings carry over.
+- Name "Anvil". Remotes: `origin` = imsalik/anvil (private), `jc` = jcrussell/forge (base), `upstream` = forge-ext/forge. Work on `main-personal`.
 - Commit or push only when asked. Beads (`.beads/`) is upstream's tracker and is not used here.
 - Planned features: per-monitor workspaces (e.g. ws 3,5 pinned to the secondary monitor, Hyprland-style) and a bar on secondary monitors.
 

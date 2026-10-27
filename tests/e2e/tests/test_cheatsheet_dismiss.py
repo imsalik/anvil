@@ -15,7 +15,7 @@ import time
 # Resolve the live Cheatsheet and snapshot the state that distinguishes a clean
 # overlay from a stranded, input-grabbing one.
 PRELUDE = r"""
-const ext = Main.extensionManager.lookup('forge@saliksalam').stateObj;
+const ext = Main.extensionManager.lookup('anvil@imsalik').stateObj;
 const sheet = ext && ext.cheatsheet
   ? ext.cheatsheet
   : (ext && ext.keybindings && ext.keybindings.cheatsheet);

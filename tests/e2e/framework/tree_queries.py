@@ -5,7 +5,7 @@
 # on success.
 FOCUS_WINDOW_SIBLING_OF_CON = """
 (() => {
-  const ext = Main.extensionManager.lookup('forge@saliksalam').stateObj;
+  const ext = Main.extensionManager.lookup('anvil@imsalik').stateObj;
   const tree = ext && ext.extWm && ext.extWm.tree;
   if (!tree) return 'no-tree';
   let target = null;

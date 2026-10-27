@@ -57,7 +57,7 @@ body:
     attributes:
       label: Other installed/enabled extensions
       description: Run `gnome-extensions list --enabled --details` and paste the output here.
-      placeholder: "forge@saliksalam\n	Name: Forge\n	Description: Tiling and window manager for GNOME\n\nPlease report bugs/issues on https://github.com/forge-ext/forge/issues\n	Path: /home/x/.local/share/gnome-shell/extensions/forge@saliksalam\n	URL: https://github.com/forge-ext/forge\n	Version: 00\n	State: ENABLED"
+      placeholder: "anvil@imsalik\n	Name: Forge\n	Description: Tiling and window manager for GNOME\n\nPlease report bugs/issues on https://github.com/forge-ext/forge/issues\n	Path: /home/x/.local/share/gnome-shell/extensions/anvil@imsalik\n	URL: https://github.com/forge-ext/forge\n	Version: 00\n	State: ENABLED"
       render: shell
     validations:
       required: true

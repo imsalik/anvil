@@ -67,7 +67,7 @@ describe("Bug forge-jvgj: a null user stylesheet must not strip all Forge stylin
 
   function makeManager(stylesheetFile) {
     return new ExtensionThemeManager({
-      metadata: { uuid: "forge@saliksalam" },
+      metadata: { uuid: "anvil@imsalik" },
       configMgr: { stylesheetFile, defaultStylesheetFile },
       settings: {},
     });

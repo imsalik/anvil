@@ -7,7 +7,7 @@
 - **Restart GNOME Shell** — on X11, `Alt+F2` → `r` → Enter. On Wayland, log out and
   back in.
 - **Check it's enabled** — `gnome-extensions list --enabled` should include
-  `forge@saliksalam`.
+  `anvil@imsalik`.
 
 ## A window won't tile (or won't float)
 

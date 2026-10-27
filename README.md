@@ -74,21 +74,21 @@ app by searching for "Forge".
 
 ### From a pre-built release
 
-Download `forge@saliksalam.zip` from the
+Download `anvil@imsalik.zip` from the
 [latest release](https://github.com/jcrussell/forge/releases/latest), then:
 
 ```bash
 # (optional) verify the checksum and build provenance
 sha256sum -c SHA256SUMS
-gh attestation verify forge@saliksalam.zip --repo jcrussell/forge
+gh attestation verify anvil@imsalik.zip --repo jcrussell/forge
 
 # install
-gnome-extensions install --force forge@saliksalam.zip
+gnome-extensions install --force anvil@imsalik.zip
 
 # then log out and back in (X11: Alt+F2, then r) so the shell picks it up
 
 # ...and enable
-gnome-extensions enable forge@saliksalam
+gnome-extensions enable anvil@imsalik
 ```
 
 `enable` fails with "does not exist" until the shell has re-scanned — that's why the

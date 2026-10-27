@@ -6,7 +6,7 @@
 set -u
 REPO=$(cd "$(dirname "$0")/../.." && pwd)
 D=$HOME/.cache/forge-smoke
-UUID=forge@saliksalam
+UUID=anvil@imsalik
 EXT=$D/data/gnome-shell/extensions/$UUID
 rm -rf "$D" && mkdir -p "$EXT" "$D/config"
 cp -r "$REPO"/temp/* "$EXT"

@@ -80,7 +80,7 @@ print_system_info
 
 # Enable the Forge extension if not already enabled
 echo "Ensuring Forge extension is enabled..."
-gnome-extensions enable forge@saliksalam 2>/dev/null || true
+gnome-extensions enable anvil@imsalik 2>/dev/null || true
 
 # Wait for GNOME Shell to be fully ready
 echo "Waiting for GNOME Shell..."

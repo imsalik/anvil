@@ -3,7 +3,7 @@ spawn A
 spawn B
 spawn C
 # B -> ws3 (shown on secondary), C -> ws5 (hidden), primary to ws2
-(() => { const m = Main.extensionManager.lookup('forge@saliksalam').stateObj.monitorWorkspaces; const get = c => global.display.get_tab_list(0, null).find(w => w.get_wm_class() === c); get('B').activate(global.get_current_time()); m.moveFocusedWindowTo(2); get('C').activate(global.get_current_time()); m.moveFocusedWindowTo(4); m.focusWorkspace(1, {warp: false}); return 'ok'; })()
+(() => { const m = Main.extensionManager.lookup('anvil@imsalik').stateObj.monitorWorkspaces; const get = c => global.display.get_tab_list(0, null).find(w => w.get_wm_class() === c); get('B').activate(global.get_current_time()); m.moveFocusedWindowTo(2); get('C').activate(global.get_current_time()); m.moveFocusedWindowTo(4); m.focusWorkspace(1, {warp: false}); return 'ok'; })()
 sleep 1
 !/usr/bin/python3 -I "$REPO/tests/smoke/monconf.py" single
 sleep 2

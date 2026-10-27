@@ -37,7 +37,7 @@ class ShellProxy:
     SHELL_OBJECT_PATH = "/org/gnome/Shell"
     SHELL_INTERFACE = "org.gnome.Shell"
 
-    FORGE_UUID = "forge@saliksalam"
+    FORGE_UUID = "anvil@imsalik"
 
     # Injected test bridge (forge-1gu). The JS lives in bridge.js next to this file and is
     # sent once per connection; see _ensure_bridge().

@@ -26,7 +26,7 @@
 (function () {
   if (globalThis._forgeTestBridge) return "ok"; // idempotency belt-and-suspenders (Python flag is primary guard)
 
-  const FORGE_UUID = "forge@saliksalam";
+  const FORGE_UUID = "anvil@imsalik";
 
   // Resolve GI namespaces ONCE at install time and capture them in the method closures.
   // imports.gi.* works in the Eval scope; capturing here avoids re-importing per call and
