@@ -14,7 +14,7 @@ Each workspace belongs to one monitor, like Hyprland's workspace rules. For exam
 - `Super+Shift+1..9` sends the focused window to that workspace without following it.
 - Switching to an empty workspace on another monitor moves the pointer there, so new windows open on that monitor.
 - Dragging a window to another monitor moves it to the workspace that monitor is showing.
-- Directional focus and move (`Super+H/J/K/L`, `Super+Shift+H/J/K/L`) cross into the workspace the neighbouring monitor is showing.
+- Directional focus and move (`Super+H/J/K/L`, `Super+Shift+H/J/K/L`) cross into the workspace the neighbouring monitor is showing. Focusing toward a monitor with no windows moves the pointer there, so the next window opens on it.
 - Windows keep their workspace when a monitor is unplugged and plugged back in (tested with virtual monitors, not yet with a real dock).
 - Configure it under **Preferences → Monitors**: one switch for the feature, and a monitor picker for each workspace. Unassigned workspaces stay on the primary. The choices are roles: **Primary**, **Secondary** (the leftmost other external monitor, or the built-in screen if there is none) and **Built-in**, each labeled with the port it maps to right now. Roles keep working when a dock renames ports (`DP-5` one login, `DP-6` the next). Older assignments to a fixed port still work and show as "fixed port" or "disconnected".
 
