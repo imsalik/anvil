@@ -17,3 +17,11 @@ sleep 1
 (() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; e.extWm.command({ name: 'Move', direction: 'Right' }); return 'ok'; })()
 sleep 2
 (() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; const m = e.monitorWorkspaces; const a = global.display.get_tab_list(0, null).find(w => w.get_wm_class() === 'A'); let n = e.extWm.tree.findNode(a); while (n && n.nodeType !== 'MONITOR') n = n.parentNode; const ok = a.get_monitor() === 1 && a._forgeMwsIndex === 2 && n?.nodeValue === 'mo1ws2'; return (ok ? 'PASS' : 'FAIL') + ' move-right=' + JSON.stringify({mon: a.get_monitor(), tag: a._forgeMwsIndex, node: n?.nodeValue, shown: [...m._shown]}); })()
+# --- primary ws1 is now empty: Focus Left lands on it (pointer moves, no focus),
+# and Focus Right from there returns to the secondary.
+(() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; e.extWm.command({ name: 'Focus', direction: 'Left' }); return 'ok'; })()
+sleep 1
+(() => { const f = global.display.get_focus_window()?.get_wm_class() ?? null; const mon = global.display.get_current_monitor(); return (f === null && mon === 0 ? 'PASS' : 'FAIL') + ' focus-left-empty=' + JSON.stringify({focus: f, pointerMon: mon}); })()
+(() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; e.extWm.command({ name: 'Focus', direction: 'Right' }); return 'ok'; })()
+sleep 1
+(() => { const w = global.display.get_focus_window(); const ok = !!w && w.get_monitor() === 1; return (ok ? 'PASS' : 'FAIL') + ' focus-right-back=' + JSON.stringify({focus: w?.get_wm_class() ?? null, mon: w?.get_monitor()}); })()
