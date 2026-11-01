@@ -30,8 +30,8 @@ fi
 
 # Annotated-tag message as prelude. Must check the object type first: a
 # lightweight tag ref resolves straight to the commit, and %(contents) would then
-# echo that commit's whole message into the notes. RELEASING.md allows lightweight
-# tags, so this path is the common one.
+# echo that commit's whole message into the notes. Lightweight tags are allowed,
+# so this path is the common one.
 if [ "$(git cat-file -t "refs/tags/${TAG}" 2>/dev/null || true)" = "tag" ]; then
   PRELUDE="$(git for-each-ref --format='%(contents)' "refs/tags/${TAG}" |
     sed '/^-----BEGIN PGP SIGNATURE-----/,$d')"

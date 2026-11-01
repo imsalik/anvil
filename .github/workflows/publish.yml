@@ -3,7 +3,7 @@
 #
 # Trigger: push a tag matching v* (the repo's v<gnome>-<ego-build> scheme, e.g.
 # v49-90). The tagged commit is built into anvil@imsalik.zip — the same
-# EGO-shaped zip a maintainer uploads to extensions.gnome.org (see RELEASING.md).
+# EGO-shaped zip a maintainer uploads to extensions.gnome.org.
 #
 # The zip is checksummed (SHA256SUMS) and gets a keyless build-provenance
 # attestation (Sigstore via GitHub OIDC — no signing keys to manage), verifiable
@@ -102,7 +102,7 @@ jobs:
           # A -beta/-rc tag (v49-90-beta.1, v49-90-rc.1) is a pre-release:
           # flagged as such and never shown as "Latest". A bare tag (v49-90 — the
           # hyphen is the gnome-major/ego-build separator, not a suffix) is the
-          # stable, EGO-bound cut. See RELEASING.md.
+          # stable, EGO-bound cut.
           prerelease: ${{ contains(github.ref_name, '-beta') || contains(github.ref_name, '-rc') }}
           files: |
             anvil@imsalik.zip

@@ -18,8 +18,8 @@
 ARG FEDORA_VERSION=42
 FROM registry.fedoraproject.org/fedora:${FEDORA_VERSION}
 
-LABEL maintainer="Forge <anvil@imsalik>"
-LABEL description="E2E testing environment for Forge GNOME Shell extension"
+LABEL maintainer="Anvil <anvil@imsalik>"
+LABEL description="E2E testing environment for Anvil GNOME Shell extension"
 
 # Install GNOME Shell + test dependencies in a single layer.
 # gnome-shell: the shell itself plus gnome-extensions CLI.
