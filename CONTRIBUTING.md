@@ -43,6 +43,7 @@ Per-monitor workspace smoke tests run a headless dual-monitor shell (after
 tests/smoke/smoke.sh tests/smoke/monitor-workspaces.steps
 tests/smoke/smoke.sh tests/smoke/monitor-workspaces-drag.steps
 tests/smoke/smoke.sh tests/smoke/monitor-hotplug.steps
+tests/smoke/smoke.sh tests/smoke/monitor-focus.steps
 ```
 
 - Unit-test guide (fixtures, mocks, avoiding vacuous tests):

@@ -14,8 +14,9 @@ Each workspace belongs to one monitor, like Hyprland's workspace rules. For exam
 - `Super+Shift+1..9` sends the focused window to that workspace without following it.
 - Switching to an empty workspace on another monitor moves the pointer there, so new windows open on that monitor.
 - Dragging a window to another monitor moves it to the workspace that monitor is showing.
+- Directional focus and move (`Super+H/J/K/L`, `Super+Shift+H/J/K/L`) cross into the workspace the neighbouring monitor is showing.
 - Windows keep their workspace when a monitor is unplugged and plugged back in (tested with virtual monitors, not yet with a real dock).
-- Configure it under **Preferences → Monitors**: one switch for the feature, and a monitor picker for each workspace. Unassigned workspaces stay on the primary. Monitors are listed by connector (for example `DP-5`), and a configured monitor that is disconnected stays in the list, marked "disconnected".
+- Configure it under **Preferences → Monitors**: one switch for the feature, and a monitor picker for each workspace. Unassigned workspaces stay on the primary. The choices are roles: **Primary**, **Secondary** (the leftmost other external monitor, or the built-in screen if there is none) and **Built-in**, each labeled with the port it maps to right now. Roles keep working when a dock renames ports (`DP-5` one login, `DP-6` the next). Older assignments to a fixed port still work and show as "fixed port" or "disconnected".
 
 Per-monitor workspaces and the bar have only been tested on GNOME 50 (Wayland).
 
@@ -77,11 +78,11 @@ Then log out and back in. Changes to settings and keybindings apply live, but co
 - Preferences: `gnome-extensions prefs anvil@imsalik`
 - Window rules: `~/.config/forge/config/windows.json` ([window rules](docs/user/rules.md))
 - Stylesheet overrides: `~/.config/forge/stylesheet/forge/stylesheet.css` ([theming](docs/user/theming.md))
-- Per-monitor workspaces from the command line, using the `monitor-workspaces`, `monitor-workspaces-enabled` and `monitor-bar-enabled` keys of `org.gnome.shell.extensions.forge`. The format is `CONNECTOR:workspaces`, with workspaces 1-based and monitors separated by `;`:
+- Per-monitor workspaces from the command line, using the `monitor-workspaces`, `monitor-workspaces-enabled` and `monitor-bar-enabled` keys of `org.gnome.shell.extensions.forge`. The format is `MONITOR:workspaces`, with workspaces 1-based and monitors separated by `;`. `MONITOR` is a role (`primary`, `secondary`, `builtin`), a connector such as `DP-5`, or a monitor index:
 
   ```bash
   gsettings --schemadir ~/.local/share/gnome-shell/extensions/anvil@imsalik/schemas \
-    set org.gnome.shell.extensions.forge monitor-workspaces 'DP-5:3,5'
+    set org.gnome.shell.extensions.forge monitor-workspaces 'secondary:3,5,7'
   ```
 
 ## Docs
@@ -96,7 +97,7 @@ Run `make help` for every target. The ones I use most:
 - `npm test`: unit tests (Vitest, mocked GNOME APIs)
 - `npm run lint:src`, `npm run typecheck`: ESLint and `tsc`
 - `make test-devkit`: nested shell with two virtual monitors, using its own config and cache dirs so it doesn't touch the desktop session
-- `tests/smoke/smoke.sh tests/smoke/<name>.steps` (after `make build debug`): headless dual-monitor smoke tests for per-monitor workspaces, drag and hotplug
+- `tests/smoke/smoke.sh tests/smoke/<name>.steps` (after `make build debug`): headless dual-monitor smoke tests for per-monitor workspaces, drag, hotplug and keyboard focus
 - `make e2e-test`: Dockerized end-to-end tests against real GNOME Shell
 
 More in [CONTRIBUTING.md](CONTRIBUTING.md) and [tests/README.md](tests/README.md).
