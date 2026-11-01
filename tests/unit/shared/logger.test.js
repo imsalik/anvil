@@ -82,7 +82,7 @@ describe("Logger", () => {
   describe("fatal", () => {
     it("should log when logging is enabled", () => {
       Logger.fatal("test message");
-      expect(logSpy).toHaveBeenCalledWith("[Forge] [FATAL]", "test message");
+      expect(logSpy).toHaveBeenCalledWith("[Anvil] [FATAL]", "test message");
     });
 
     it("should not log when logging is disabled", () => {
@@ -95,7 +95,7 @@ describe("Logger", () => {
 
     it("should log with multiple arguments", () => {
       Logger.fatal("error", "code", 123);
-      expect(logSpy).toHaveBeenCalledWith("[Forge] [FATAL]", "error", "code", 123);
+      expect(logSpy).toHaveBeenCalledWith("[Anvil] [FATAL]", "error", "code", 123);
     });
 
     it("should always log when level is ALL", () => {
@@ -113,7 +113,7 @@ describe("Logger", () => {
       Logger.init(mockSettings);
 
       Logger.error("test error");
-      expect(logSpy).toHaveBeenCalledWith("[Forge] [ERROR]", "test error");
+      expect(logSpy).toHaveBeenCalledWith("[Anvil] [ERROR]", "test error");
     });
 
     it("should not log when level is FATAL", () => {
@@ -139,7 +139,7 @@ describe("Logger", () => {
       Logger.init(mockSettings);
 
       Logger.warn("test warning");
-      expect(logSpy).toHaveBeenCalledWith("[Forge] [WARN]", "test warning");
+      expect(logSpy).toHaveBeenCalledWith("[Anvil] [WARN]", "test warning");
     });
 
     it("should not log when level is ERROR", () => {
@@ -165,7 +165,7 @@ describe("Logger", () => {
       Logger.init(mockSettings);
 
       Logger.info("test info");
-      expect(logSpy).toHaveBeenCalledWith("[Forge] [INFO]", "test info");
+      expect(logSpy).toHaveBeenCalledWith("[Anvil] [INFO]", "test info");
     });
 
     it("should not log when level is WARN", () => {
@@ -191,7 +191,7 @@ describe("Logger", () => {
       Logger.init(mockSettings);
 
       Logger.debug("test debug");
-      expect(logSpy).toHaveBeenCalledWith("[Forge] [DEBUG]", "test debug");
+      expect(logSpy).toHaveBeenCalledWith("[Anvil] [DEBUG]", "test debug");
     });
 
     it("should not log when level is INFO", () => {
@@ -217,7 +217,7 @@ describe("Logger", () => {
       Logger.init(mockSettings);
 
       Logger.trace("test trace");
-      expect(logSpy).toHaveBeenCalledWith("[Forge] [TRACE]", "test trace");
+      expect(logSpy).toHaveBeenCalledWith("[Anvil] [TRACE]", "test trace");
     });
 
     it("should not log when level is DEBUG", () => {
@@ -240,7 +240,7 @@ describe("Logger", () => {
   describe("log", () => {
     it("should log when logging is enabled", () => {
       Logger.log("generic message");
-      expect(logSpy).toHaveBeenCalledWith("[Forge] [LOG]", "generic message");
+      expect(logSpy).toHaveBeenCalledWith("[Anvil] [LOG]", "generic message");
     });
 
     it("should not log when level is OFF", () => {
@@ -277,7 +277,7 @@ describe("Logger", () => {
       Logger.trace("trace");
 
       expect(logSpy).toHaveBeenCalledTimes(1);
-      expect(logSpy).toHaveBeenCalledWith("[Forge] [FATAL]", "fatal");
+      expect(logSpy).toHaveBeenCalledWith("[Anvil] [FATAL]", "fatal");
     });
 
     it("should log fatal and error when level is ERROR", () => {
@@ -360,7 +360,7 @@ describe("Logger", () => {
 
       Logger.init(mockSettings);
       Logger.info("after re-init");
-      expect(logSpy).toHaveBeenCalledWith("[Forge] [INFO]", "after re-init");
+      expect(logSpy).toHaveBeenCalledWith("[Anvil] [INFO]", "after re-init");
     });
   });
 });

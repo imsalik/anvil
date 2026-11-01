@@ -115,7 +115,7 @@ ifeq ($(HAS_XGETTEXT),yes)
 update-pot:
 	mkdir -p po
 	xgettext --from-code=UTF-8 --add-location=file --sort-by-file \
-	  --package-name "Forge" --output=po/forge.pot \
+	  --package-name "Anvil" --output=po/forge.pot \
 	  $$(find lib -name '*.js' | sort) ./prefs.js ./extension.js \
 	  schemas/org.gnome.shell.extensions.forge.gschema.xml
 	sed -i '/^"POT-Creation-Date:/d' po/forge.pot
