@@ -1,0 +1,19 @@
+# Keyboard focus/move across monitors with per-monitor workspaces.
+# A on primary ws1, B on secondary ws3. Focus Right from A must reach B and
+# Focus Left must come back; Move Right sends A to ws3 on the secondary.
+spawn A
+spawn B
+sleep 2
+(() => { const m = Main.extensionManager.lookup('anvil@imsalik').stateObj.monitorWorkspaces; const b = global.display.get_tab_list(0, null).find(w => w.get_wm_class() === 'B'); b.activate(global.get_current_time()); m.moveFocusedWindowTo(2); return 'ok'; })()
+sleep 1
+(() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; const a = global.display.get_tab_list(0, null).find(w => w.get_wm_class() === 'A'); a.activate(global.get_current_time()); return 'ok'; })()
+sleep 1
+(() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; e.extWm.command({ name: 'Focus', direction: 'Right' }); return 'ok'; })()
+sleep 1
+(() => { const f = global.display.get_focus_window()?.get_wm_class(); return (f === 'B' ? 'PASS' : 'FAIL') + ' focus-right=' + f; })()
+(() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; e.extWm.command({ name: 'Focus', direction: 'Left' }); return 'ok'; })()
+sleep 1
+(() => { const f = global.display.get_focus_window()?.get_wm_class(); return (f === 'A' ? 'PASS' : 'FAIL') + ' focus-left=' + f; })()
+(() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; e.extWm.command({ name: 'Move', direction: 'Right' }); return 'ok'; })()
+sleep 2
+(() => { const e = Main.extensionManager.lookup('anvil@imsalik').stateObj; const m = e.monitorWorkspaces; const a = global.display.get_tab_list(0, null).find(w => w.get_wm_class() === 'A'); let n = e.extWm.tree.findNode(a); while (n && n.nodeType !== 'MONITOR') n = n.parentNode; const ok = a.get_monitor() === 1 && a._forgeMwsIndex === 2 && n?.nodeValue === 'mo1ws2'; return (ok ? 'PASS' : 'FAIL') + ' move-right=' + JSON.stringify({mon: a.get_monitor(), tag: a._forgeMwsIndex, node: n?.nodeValue, shown: [...m._shown]}); })()
