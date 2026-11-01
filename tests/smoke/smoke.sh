@@ -21,7 +21,7 @@ gs set org.gnome.shell enabled-extensions "[\"'"$UUID"'\"]"
 gs set org.gnome.mutter dynamic-workspaces false
 gs set org.gnome.desktop.wm.preferences num-workspaces 6
 fs monitor-workspaces-enabled true
-fs monitor-workspaces "Meta-1:3,5"
+fs monitor-workspaces "secondary:3,5"
 fs monitor-bar-enabled true
 gnome-shell --headless --wayland --unsafe-mode --wayland-display=wl-smoke \
   --virtual-monitor 2560x1440 --virtual-monitor 1920x1080 >"'"$D"'/shell.log" 2>&1 &
